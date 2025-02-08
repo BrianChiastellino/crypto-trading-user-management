@@ -1,27 +1,49 @@
-# TesisUTN
+# Sistema de Trading y Gestión de Usuarios
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.0.
+## Descripción
 
-## Development server
+Este proyecto es un **sistema de trading y gestión de usuarios** desarrollado con **Angular**, diseñado para ofrecer una experiencia intuitiva y segura para los usuarios. Permite:
 
-Run `npm start` and `npm run server` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Registro y autenticación de usuarios**.
+- **Gestión de billeteras virtuales**: cargar saldo, retirarlo, comprar y vender criptomonedas.
+- **Acceso en tiempo real** a la información de precios de criptomonedas mediante la API de **CoinGecko**.
 
-## Code scaffolding
+El sistema también cuenta con un **panel de administración**, donde un administrador puede:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Visualizar y gestionar usuarios**.
+- **Monitorear billeteras y movimientos** (compras, ventas, depósitos y retiros).
+- **Mantener el control del sistema**, asegurando su correcto funcionamiento.
 
-## Build
+## Tecnologías utilizadas
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### **Frontend**
 
-## Running unit tests
+- **Angular** con **Angular Material** para la interfaz de usuario.
+- **RxJS y BehaviorSubject** para gestión de estados y datos en tiempo real.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### **Backend**
 
-## Running end-to-end tests
+Este proyecto consume la API pública de **CoinGecko** para obtener información actualizada sobre criptomonedas.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Funcionalidades principales
 
-## Further help
+### **Autenticación y Seguridad**
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **Autenticación segura** mediante un sistema basado en cookies.
+- **Protección de rutas** en el frontend con **guards**.
+- **Gestión de sesión** con BehaviorSubject para manejar el estado del usuario.
+
+### **Gestión de Usuarios y Billeteras**
+
+- Creación, edición y eliminación de usuarios.
+- Registro de movimientos dentro de las billeteras.
+- Administración centralizada para mejorar la supervisión del sistema.
+
+## API CoinGecko
+
+Para obtener el valor actualizado de las criptomonedas, utilizamos la **API de CoinGecko**, que proporciona información de hasta **100 criptomonedas** en su versión gratuita. Puedes consultar más detalles en su documentación oficial: [CoinGecko API](https://www.coingecko.com/es/api).
+
+## Objetivo del Proyecto
+
+Este desarrollo busca demostrar **habilidades en Angular y consumo de APIs externas**, aplicando **buenas prácticas en la gestión de datos y seguridad.**
+
