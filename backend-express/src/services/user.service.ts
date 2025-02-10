@@ -1,24 +1,38 @@
 import { DeleteResult, UpdateResult } from "typeorm";
+
+
 import { AppDataSource } from "../database/database";
 import { User } from "../models/user.model";
+import { userRepository } from "../repositories/user.repository";
 
 
 class UserService {
 
     async create ( user : User ) : Promise<User | null> {
-        return await AppDataSource.manager.save( user );
+        return await userRepository.save( user );
     };
 
     async get ( id : User['id']) : Promise<User | null> {
-        return await AppDataSource.manager.findOneBy(User, { id })
+        return await userRepository.findOneBy({ id })
     };
 
+    // Obtenemos el usuario por documento, email, username para el login o registro
+    async getBy ( fiedls : Partial<User> ) : Promise<User | null>{
+        return await userRepository.findOne({ where: fiedls });
+    }
+
+    // Obtenemos un booleano para saber si hay usuarios en el sistema
+    public async hasAnyUsers(): Promise<boolean> {
+        const userCount = await userRepository.find()
+        return userCount.length > 0;
+    }
+
     async update ( id : User['id'], userFieldsToUpdate : Partial<User> ) : Promise<UpdateResult> {
-        return await AppDataSource.manager.update(User, { id }, userFieldsToUpdate)
+        return await userRepository.update( id , userFieldsToUpdate)
     };
 
     async delete ( id : User['id'] ) : Promise<DeleteResult> {
-        return await AppDataSource.manager.delete(User, { id });
+        return await userRepository.delete( id );
     };
 
 };
