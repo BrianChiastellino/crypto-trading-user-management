@@ -1,17 +1,18 @@
 import app from "./app";
+
 import { AppDataSource } from "./database/database";
 
 
 async function main () {
     try {
-        const PORT = process.env.APP_PORT ?? 8080;
+        const { APP_PORT : port } = process.env ?? 8080;
 
         await AppDataSource.initialize();
 
         console.log(`Database connected sucessful`);
 
-        app.listen( PORT, () => {
-            console.log(`App is running on port ${ PORT }`);
+        app.listen( port, () => {
+            console.log(`App is running on port ${ port }`);
         })
 
     } catch ( error ) {

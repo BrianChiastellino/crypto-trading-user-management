@@ -1,14 +1,16 @@
 import { DataSource } from 'typeorm';
+import { User } from '../models/user.model';
 
+const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE, } = process.env;
 
 export const AppDataSource = new DataSource({
 
     type:   'mysql',
-    host:   process.env.DB_HOST,
-    port:   Number(process.env.DB_PORT),
-    username:   process.env.DB_USERNAME,
-    password:   process.env.DB_PASSWORD,
-    database:   process.env.DB_DATABASE,
+    host:   DB_HOST,
+    port:   Number(DB_PORT),
+    username:   DB_USERNAME,
+    password:   DB_PASSWORD,
+    database:   DB_DATABASE,
     synchronize:    true,
     logging:    true,
     entities:   [],
