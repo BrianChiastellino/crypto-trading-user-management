@@ -21,6 +21,7 @@ class AuthController {
             const { email, document, username, password } = req.body;
 
             const user = await userService.getBy({ document, email, username });
+            console.log(req.body);
 
             if ( !user ) 
                 throw new UnauthorizedError('Invalid username or password');
@@ -30,8 +31,7 @@ class AuthController {
 
             const token = jwt.sign({ id : user.id, admin : user.admin}, jwtScretKey! , { expiresIn : '1h'})
 
-            sessionStorage.setItem('token', token);
-            res.status(200).json({ token, payload: { id: user.id, admin: user.admin } });
+            res.status(200).json({ token, id: user.id, admin: user.admin });
 
         } catch ( error ) {
             next( error );
@@ -43,18 +43,21 @@ class AuthController {
             const { body } = req;
             const { email, document, username } = body;
 
+            console.log({ body });
+
             const userExists = await userService.getBy({ document, email, username });
 
             if ( !!userExists ) 
                throw new  BadRequestError('User already exists');
 
-            const user: User = userRepository.create({
-                ...body,
-                password: bcrypt.hashSync(body.password),       // Encriptamos la password
-                admin: !await userService.hasAnyUsers(),        // Asignación de admin de forma directa
-            })[0];                                              // Obtenemos el user en la posicion 0
+            const [ userCreated ] = [userRepository.create({        // Destrucutramos el array 
+                ...body,                                            
+                password: bcrypt.hashSync(body.password),       
+                admin: !await userService.hasAnyUsers(),            // Creamos el admin en caso de que no haya usuarios registrados
+            })].flat(); 
 
-            await userService.create( user );
+    
+            const user = await userService.create( userCreated );
 
             res.status(201).json( user );
 
@@ -64,6 +67,5 @@ class AuthController {
     }
 
 }
-
 
 export default new AuthController();

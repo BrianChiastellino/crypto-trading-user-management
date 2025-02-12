@@ -17,14 +17,15 @@ class UserService {
     };
 
     // Obtenemos el usuario por documento, email, username para el login o registro
-    async getBy ( fiedls : Partial<User> ) : Promise<User | null>{
-        return await userRepository.findOne({ where: fiedls });
+    async getBy( { document, email, username }: Partial<User> ): Promise<User | null> {  // Destrucutramos el parametro
+        return await userRepository.findOne({
+            where: [{ document, username, email }] });                                   // Encontramos el usuario por documento, username, email
     }
 
     // Obtenemos un booleano para saber si hay usuarios en el sistema
     public async hasAnyUsers(): Promise<boolean> {
-        const userCount = await userRepository.find()
-        return userCount.length > 0;
+        const userCount  = await userRepository.count()
+        return userCount > 0;
     }
 
     async update ( id : User['id'], userFieldsToUpdate : Partial<User> ) : Promise<UpdateResult> {
