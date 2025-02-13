@@ -23,8 +23,8 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
             if ( error || !decoded ) 
                 throw new UnauthorizedError('Invalid or expired token ');
 
-            const user = ( decoded ) as User;
-            req.user = user;
+            req.userPayloadDTO = decoded as User;
+
             next();
         });
 

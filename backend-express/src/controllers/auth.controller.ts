@@ -10,6 +10,7 @@ import userService from "../services/user.service";
 
 import { BadRequestError } from '../errors/bad-request.error';
 import { UnauthorizedError } from "../errors/unauthorized.error";
+import { UserAuthDTO } from "../dtos/auth-user.dto";
 
 
 const { JWT_SCRET_KEY : jwtScretKey } = process.env;
@@ -18,10 +19,10 @@ class AuthController {
 
     async login ( req : Request, res : Response, next : NextFunction ) {
         try {
-            const { email, document, username, password } = req.body;
+            const loginDTO : UserAuthDTO = req.body;
+            const { email, document, username, password } = loginDTO;
 
             const user = await userService.getBy({ document, email, username });
-            console.log(req.body);
 
             if ( !user ) 
                 throw new UnauthorizedError('Invalid username or password');
@@ -40,10 +41,9 @@ class AuthController {
 
     async register ( req : Request, res : Response, next : NextFunction ) {
         try {
-            const { body } = req;
-            const { email, document, username } = body;
+            const registerDTO : UserAuthDTO = req.body;
 
-            console.log({ body });
+            const { document, email, username, password } = registerDTO;
 
             const userExists = await userService.getBy({ document, email, username });
 
@@ -51,8 +51,8 @@ class AuthController {
                throw new  BadRequestError('User already exists');
 
             const [ userCreated ] = [userRepository.create({        // Destrucutramos el array 
-                ...body,                                            
-                password: bcrypt.hashSync(body.password),       
+                ...registerDTO,                                            
+                password: bcrypt.hashSync(password),       
                 admin: !await userService.hasAnyUsers(),            // Creamos el admin en caso de que no haya usuarios registrados
             })].flat(); 
 

@@ -11,7 +11,7 @@ class UserController {
 
         try {
             const { id } = req.params;                  // Obtenemos el id por el parametro /:id
-            const user2 = req.user; 
+            const user2 = req.userPayloadDTO; 
             console.log({user2});
 
             const user = await userService.get( id );
