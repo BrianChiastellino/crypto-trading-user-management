@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { catchError, filter, pipe, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../shared/services/toast.service';
 import { environment } from '../../../../environments/environment';
