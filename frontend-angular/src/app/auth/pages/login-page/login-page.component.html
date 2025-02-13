@@ -10,8 +10,8 @@
       <form [formGroup]="loginForm" (submit)="onSubmit()">
         <mat-form-field appearance="outline" class="w-100 mb-3">
           <mat-label>Email</mat-label>
-          <input type="text" matInput placeholder="Usuario" formControlName="email">
-          <mat-error *ngIf="isValidfield('email')">
+          <input type="text" matInput placeholder="Usuario" formControlName="identifier">
+          <mat-error *ngIf="isValidfield('identifier')">
             Ingrese un email valido
           </mat-error>
         </mat-form-field>

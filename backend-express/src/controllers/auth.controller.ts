@@ -21,8 +21,11 @@ class AuthController {
         try {
             const loginDTO : UserAuthDTO = req.body;
             const { email, document, username, password } = loginDTO;
+            console.log({loginDTO})
 
             const user = await userService.getBy({ document, email, username });
+
+            console.log({ user })
 
             if ( !user ) 
                 throw new UnauthorizedError('Invalid username or password');
@@ -32,7 +35,7 @@ class AuthController {
 
             const token = jwt.sign({ id : user.id, admin : user.admin}, jwtScretKey! , { expiresIn : '1h'})
 
-            res.status(200).json({ token, id: user.id, admin: user.admin });
+            res.status(200).json({ token, user });
 
         } catch ( error ) {
             next( error );

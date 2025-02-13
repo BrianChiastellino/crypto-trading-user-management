@@ -7,6 +7,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { environment } from '../../../../environments/environment';
 import { CustomValidators } from '../../../shared/validators/custom-validators';
 import { CustomHelpers } from '../../../shared/helpers/custom-helpers';
+import { UserLogin } from '../../models/user-login.interface';
 
 @Component({
   selector: 'auth-login-page',
@@ -20,7 +21,7 @@ export class LoginPageComponent {
   private userToken: string = environment.userToken;
 
   public loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.pattern(CustomValidators.emailPattern)]],
+    identifier: ['', [Validators.required, Validators.pattern(CustomValidators.emailPattern)]],
     password: ['', [Validators.required, Validators.pattern(CustomValidators.passwordPattern)]]
   });
 
@@ -41,24 +42,38 @@ export class LoginPageComponent {
 
   public login(): void{
 
-    const email = this.loginForm.controls['email'].value;
-    const password = this.loginForm.controls['password'].value;
+      const identifier = this.loginForm.controls['identifier'].value;
+      const password = this.loginForm.controls['password'].value;
 
-    this.authService.login(email, password).subscribe( user => {
+      const userlogin : UserLogin = { password };
 
-      if( !user ) {
-        this.loginForm.reset();
-        return this.toastService.showError('Error', 'Email o contraseña invalidos');
+      if (identifier.includes('@')) {
+        userlogin.email = identifier;    // Si tiene @, es email
+      } else if (!isNaN(Number(identifier))) {
+        userlogin.document = identifier; // Si es número, es documento
+      } else {
+        userlogin.username = identifier; // Sino, es username
       }
 
-      localStorage.setItem(this.userToken, JSON.stringify(user));
+      this.authService.login( userlogin ).subscribe({
+        next : ( response ) => {
+          if ( !response )
+            throw Error();
 
-      if(user.admin) this.router.navigateByUrl('/admin/landing')
-        else  this.router.navigateByUrl('/landing');
+          const { token, user } = response;
 
-      this.toastService.showSuccess(`Éxito!`, 'Has iniciado sesion correctamente');
+          localStorage.setItem(this.userToken, JSON.stringify(user));
 
-    })
+          if(user.admin) this.router.navigateByUrl('/admin/landing')
+          else  this.router.navigateByUrl('/landing');
+
+          this.toastService.showSuccess(`Éxito!`, 'Has iniciado sesion correctamente');
+        },
+        error : ( error  ) => {
+          this.loginForm.reset();
+          this.toastService.showError('Error', 'Usuario o contraseña incorrecto');
+        }
+      })
   }
 
   public showPassword () : void  {
