@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 import { Wallet } from "./wallet.model";
 import { Transaction } from "./transaction.model";
@@ -12,7 +12,7 @@ export class Coin {
     @Column()
     symbol: string;
 
-    @Column({ type: 'decimal', precision: 10, scale: 4 })
+    @Column({ type: 'double'})
     coinAmount: number;
 
     @Column()
@@ -24,7 +24,12 @@ export class Coin {
     @ManyToOne(() => Wallet, wallet => wallet.coins)
     wallet: Wallet;
 
-    
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updateAt: Date;
+
     @OneToMany(() => Transaction, transaction => transaction.coin)
     /**
      * Relación OneToMany:

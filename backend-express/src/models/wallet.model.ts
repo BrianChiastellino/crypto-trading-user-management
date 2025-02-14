@@ -1,7 +1,8 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn,  } from "typeorm";
-
-import { Coin } from "./coin.model";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn,  } from "typeorm";
 import { User } from "./user.model";
+import { Coin } from "./coin.model";
+
+
 
 
 @Entity()
@@ -10,9 +11,15 @@ export class Wallet {
     @PrimaryGeneratedColumn('uuid')
     id : string;
 
-    @Column({ type : 'number'})
+    @Column({ type : 'double'})
     funds : number;
     
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updateAt: Date;
+
     @OneToOne(() => User, user => user.wallet)
     /**
      * Relación OneToOne inversa:
@@ -21,12 +28,10 @@ export class Wallet {
      */
     user: User;
 
-
     @OneToMany(() => Coin, coin => coin.wallet, { cascade : true })
     /**
      * Relacion OneToMany 
      * - Una Wallet puede contener muchas coins
      */
     coins : Coin[];
-
 } 

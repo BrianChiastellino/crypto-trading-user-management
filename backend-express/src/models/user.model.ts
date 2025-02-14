@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-import { Wallet } from "./wallet.model";
 import { Transaction } from "./transaction.model";
+import { Wallet } from "./wallet.model";
 
 @Entity()
 export class User {
@@ -34,7 +34,7 @@ export class User {
     updateAt : Date;
 
     @OneToOne(() => Wallet, wallet => wallet.user)
-    @JoinColumn()
+    @JoinColumn({referencedColumnName : 'id'})
     /**
      * Relación OneToOne:
      * - Un usuario tiene una wallet.
@@ -44,7 +44,6 @@ export class User {
     wallet: Wallet;
 
 
-   
     @OneToMany(() => Transaction, transaction => transaction.user)
     /**
     * Relación OneToMany:

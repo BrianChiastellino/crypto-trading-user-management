@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 import { Coin } from './coin.model';
 import { User } from './user.model';
@@ -14,6 +14,19 @@ export class Transaction {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
+
+    
+    @Column({ type: 'double', precision: 10, scale: 2 })
+    coinAmount: number;
+
+    @Column({ type: 'enum', enum: TransactionType })
+    type: TransactionType;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updateAt: Date;
 
     @ManyToOne(() => User, user => user.transactions, { eager: true })
     /**
@@ -34,14 +47,5 @@ export class Transaction {
      * - Crea una columna 'coinId' en Transaction como clave foránea.
      */
     coin: Coin;
-
-    @Column({ type: 'decimal', precision: 10, scale: 2 })
-    coinAmount: number;
-
-    @Column({ type: 'enum', enum: TransactionType })
-    type: TransactionType;
-
-    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    date: Date;
 
 }

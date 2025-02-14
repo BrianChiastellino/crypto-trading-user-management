@@ -6,11 +6,17 @@ import { User } from "../models/user.model";
 import { userRepository } from "../repositories/user.repository";
 
 
+//todo: Implementar logica de negocio
+
 class UserService {
 
     async create ( user : User ) : Promise<User | null> {
         return await userRepository.save( user );
     };
+
+    async getAll () : Promise<User[]> {
+        return await userRepository.find();
+    }
 
     async get ( id : User['id']) : Promise<User | null> {
         return await userRepository.findOneBy({ id })
@@ -20,13 +26,13 @@ class UserService {
     async getBy( { document, email, username }: Partial<User> ): Promise<User | null> {  // Destrucutramos el parametro
         return await userRepository.findOne({
             where: [{ document, username, email }] });                                   // Encontramos el usuario por documento, username, email
-    }
+    };
 
     // Obtenemos un booleano para saber si hay usuarios en el sistema
     public async hasAnyUsers(): Promise<boolean> {
         const userCount  = await userRepository.count()
         return userCount > 0;
-    }
+    };
 
     async update ( id : User['id'], userFieldsToUpdate : Partial<User> ) : Promise<UpdateResult> {
         return await userRepository.update( id , userFieldsToUpdate)
