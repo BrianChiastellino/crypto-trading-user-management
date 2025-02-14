@@ -84,6 +84,12 @@
           "date": "31/7/2024, 13:22:42"
         }
       ]
+    },
+    {
+      "id": "4800",
+      "idUser": "be0cb90a-d67f-49b2-894c-45ac52f560da",
+      "funds": 0,
+      "coins": []
     }
   ],
   "transactions": [
