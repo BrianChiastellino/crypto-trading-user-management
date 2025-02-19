@@ -23,9 +23,10 @@ app.use( morgan('dev'));                                // registrar solicituds 
 app.use( express.json());                               // express.json() para leer json
 
 //todo agregar middleware de auth
-app.use(`${ urlApi }/users`,authenticateJWT,
-     userRouter                                         // Ruta de usuario común logueado
-    )   
+app.use(`${urlApi}/users`,
+    authenticateJWT,
+    userRouter                                         // Ruta de usuario común logueado
+)   
 
 app.use(`${ urlApi }/auth`, authRouter )                // Ruta de autenticacion login y registro
 

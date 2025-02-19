@@ -1,9 +1,14 @@
 import authController from '../controllers/auth.controller';
 import express from 'express';
+import { validateRegister } from '../middlewares/register.middleaware';
 
 const router = express.Router();
 
-router.post('/register', authController.register );
+router.post('/register',
+    validateRegister,
+    
+    authController.register );
+    
 router.post('/login', authController.login );
 
 
