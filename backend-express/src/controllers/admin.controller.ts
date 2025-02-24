@@ -6,6 +6,9 @@ import { BadRequestError } from "../errors/bad-request.error";
 import { Wallet } from "../models/wallet.model";
 import walletService from "../services/wallet.service";
 
+import transactionService from "../services/transaction.service";
+import { Transaction } from "../models/transaction.model";
+
 
 
 class AdminController {
@@ -37,7 +40,16 @@ class AdminController {
     }
 
     async getTransactions ( req : Request, res : Response, next : NextFunction ) {
-        //todo: 
+        try {
+            const transactions : Transaction[] = await transactionService.getAll();
+
+            if ( transactions.length < 0 )
+                throw new BadRequestError('Not exists transactions in database');
+            
+            res.status(200).json(transactions);
+        } catch( error ) {
+            next( error );
+        };
     }
 
 }

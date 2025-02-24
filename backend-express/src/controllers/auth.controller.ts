@@ -21,11 +21,8 @@ class AuthController {
         try {
             const loginDTO : UserAuthDTO = req.body;
             const { email, document, username, password } = loginDTO;
-            console.log({loginDTO})
 
             const user = await userService.getBy({ document, email, username });
-
-            console.log({ user })
 
             if ( !user ) 
                 throw new UnauthorizedError('Invalid username or password');

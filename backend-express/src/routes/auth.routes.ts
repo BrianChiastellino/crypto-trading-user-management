@@ -5,7 +5,7 @@ import { validateRegister } from '../middlewares/register.middleaware';
 const router = express.Router();
 
 router.post('/register',
-    validateRegister,
+    validateRegister,                       // Middleware para valdiar los campos del formulario
     
     authController.register );
     

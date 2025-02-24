@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express"
 
 import { UnauthorizedError } from "../errors/unauthorized.error";
 
-
-
+// Middleware para verificar que sea un administador
 
 export const authAdmin = ( req : Request, res: Response, next : NextFunction) : void => {
     try {

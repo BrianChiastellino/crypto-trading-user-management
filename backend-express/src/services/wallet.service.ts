@@ -20,20 +20,19 @@ class WalletService {
         return await walletRepository.findOneBy({ id });
     };
 
-    async getByUser ( idUser : User['id']) : Promise<Wallet | null> {
-        return await walletRepository.findOne({ where: { user : { id : idUser }}})
+    async getByUserID ( userID : User['id']) : Promise<Wallet | null> {
+        return await walletRepository.findOne({ where : { userID }})
     };
 
+    //todo: Crear bien el update de la wallet
     async update ( id : Wallet['id'], walletFieldsToUpdate : Partial<Wallet> ) : Promise<UpdateResult> {
         return await walletRepository.update( id , walletFieldsToUpdate );
     };
 
+    //todo: Si el usuario tiene coins, o fondos no eliminar.
     async delete ( id : Wallet['id']) : Promise<DeleteResult> {
         return await walletRepository.delete( id );
     };
-
-
-
 }
 
 

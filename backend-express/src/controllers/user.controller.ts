@@ -10,7 +10,7 @@ class UserController {
     async get ( req : Request, res : Response, next : NextFunction ) {
 
         try {
-            const { id } = req.params;                  // Obtenemos el id por el parametro /:id
+            const { id } = req.params;                          // Obtenemos el id por el parametro /:id
 
             const user = await userService.get( id );
             // console.log({ userController : user, id  });
@@ -35,8 +35,7 @@ class UserController {
             if ( !id || !user) 
                 throw new BadRequestError(`User not found`)
 
-            // Creamos un nuevo objeto con los campos de user 
-            const updatedFieldsUser: Partial<User> = {};
+            const updatedFieldsUser: Partial<User> = {};            // Creamos un nuevo objeto con los campos de user 
     
             // Asignamos los campos disintos a updatedFieldsUser
             Object.keys(req.body).forEach((key) => {
@@ -50,11 +49,9 @@ class UserController {
             if (Object.keys( updatedFieldsUser ).length === 0)
                 return;
 
-            // Actualizamos
-            await userService.update(id , updatedFieldsUser );
+            await userService.update(id , updatedFieldsUser );      // Actualizamos
 
-            // Obtenemos el usuario actualizado
-            const updatedUser = await userService.get( id );
+            const updatedUser = await userService.get( id );        // Obtenemos el usuario actualizado
 
             res.status(200).json( updatedUser );
         

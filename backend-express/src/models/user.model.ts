@@ -1,8 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-import { Transaction } from "./transaction.model";
-import { Wallet } from "./wallet.model";
-
 @Entity()
 export class User {
     
@@ -32,27 +29,6 @@ export class User {
 
     @UpdateDateColumn()
     updateAt : Date;
-
-    @OneToOne(() => Wallet, wallet => wallet.user)
-    @JoinColumn({referencedColumnName : 'id'})
-    /**
-     * Relación OneToOne:
-     * - Un usuario tiene una wallet.
-     * - @JoinColumn() indica que la columna de clave foránea estará en User.
-     * - Crea una columna 'walletId' en User.
-     */
-    wallet: Wallet;
-
-
-    @OneToMany(() => Transaction, transaction => transaction.user)
-    /**
-    * Relación OneToMany:
-    * - Un usuario puede tener muchas transacciones.
-    * - El primer parámetro () => Transaction indica la entidad relacionada.
-    * - El segundo parámetro transaction => transaction.user especifica la propiedad inversa en Transaction.
-    *   - Esta relación no crea una columna en la tabla User, pero sí en Transaction.
-    */
-    transactions: Transaction[];
 
 
 }

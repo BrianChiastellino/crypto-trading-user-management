@@ -10,8 +10,6 @@ import { validatePassword } from "../validators/password.validator";
 import { validateName } from "../validators/name.validator";
 
 
-
-
 export const validateRegister = [
     validateName,
     validateEmail,

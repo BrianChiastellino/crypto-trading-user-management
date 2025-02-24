@@ -2,16 +2,13 @@ import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, Prim
 import { User } from "./user.model";
 import { Coin } from "./coin.model";
 
-
-
-
 @Entity()
 export class Wallet {
     
     @PrimaryGeneratedColumn('uuid')
     id : string;
 
-    @Column({ type : 'double'})
+    @Column({ type : 'double', default: 0 })
     funds : number;
     
     @CreateDateColumn()
@@ -20,18 +17,12 @@ export class Wallet {
     @UpdateDateColumn()
     updateAt: Date;
 
-    @OneToOne(() => User, user => user.wallet)
-    /**
-     * Relación OneToOne inversa:
-     * - Una wallet pertenece a un usuario.
-     * - No se crea columna aquí, solo en User.
-     */
-    user: User;
+    @OneToOne( () => User )                         // Relacion 1 a 1
+    @JoinColumn({ name : 'userID'})                 // Hacemos un join y decimos que userID es el fk de User
+    userID : User['id']
 
-    @OneToMany(() => Coin, coin => coin.wallet, { cascade : true })
-    /**
-     * Relacion OneToMany 
-     * - Una Wallet puede contener muchas coins
-     */
-    coins : Coin[];
+    @OneToMany(() => Coin, ( coin ) => coin.wallet, { nullable : true } )
+    coins : Coin[]
+
+
 } 

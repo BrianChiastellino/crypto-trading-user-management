@@ -18,9 +18,6 @@ export class Coin {
     @Column()
     image: string;
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    date: Date;
-
     @ManyToOne(() => Wallet, wallet => wallet.coins)
     wallet: Wallet;
 
@@ -29,14 +26,4 @@ export class Coin {
 
     @UpdateDateColumn()
     updateAt: Date;
-
-    @OneToMany(() => Transaction, transaction => transaction.coin)
-    /**
-     * Relación OneToMany:
-     * - Una moneda puede estar en muchas transacciones.
-     * - No crea columna en Coin, pero sí en Transaction (coinId).
-     */
-    transactions: Transaction[];
-
-
 }
