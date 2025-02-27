@@ -30,7 +30,7 @@ export class NavBarComponent implements OnInit {
 
   private isUserLoged (): void {
 
-    const user: User = JSON.parse(localStorage.getItem( this.token )!);
+    const user: User = JSON.parse(localStorage.getItem('user')!);
 
     user ? this.isLogin = true : this.isLogin = false;
     user ? this.isAdmin = user.admin : this.isAdmin = false;
@@ -66,7 +66,7 @@ export class NavBarComponent implements OnInit {
 
   public editProfile() : void {
 
-    const user: User = JSON.parse(localStorage.getItem( this.token )!)
+    const user: User = JSON.parse(localStorage.getItem('user')!)
 
     const dialogRef = this.dialog.open( EditUserDialogComponent, {
       data: user.id,

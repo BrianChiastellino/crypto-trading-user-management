@@ -34,8 +34,8 @@ app.use(`${ urlApi }/auth`,
 )                           
 
 app.use(`${urlApi}/users`,
-    authUser,                                           // Middleare verificar usuario comun
     authenticateJWT,                                    // Middleware para veriicar token
+    authUser,                                           // Middleare verificar usuario comun
     userRouter                                          // Ruta de usuario común logueado
 )   
 

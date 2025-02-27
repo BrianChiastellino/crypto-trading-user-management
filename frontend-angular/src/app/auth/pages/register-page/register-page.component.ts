@@ -39,9 +39,6 @@ export class RegisterPageComponent  {
 
 
   public onSubmit() {
-
-    debugger;
-
     this.registerForm.markAllAsTouched();
 
     if( !this.registerForm.valid ) return;
@@ -54,21 +51,31 @@ export class RegisterPageComponent  {
 
     const user = new User({ ...this.registerForm.value as User })
 
-    this.authService.registerUser(user)
-    .pipe(
-     tap( user => console.log({user})),
-    )
-    .subscribe( user => {
-
-      if( !user ) {
+    this.authService.register( user ).subscribe( user => {
+      if (!user) {
         this.registerForm.reset();
         return this.toastService.showError('Error', 'Registro invalido. Intente nuevamente');
       }
 
       this.router.navigateByUrl('auth/login')
       this.toastService.showSuccess('Éxtio!', 'Te has registrado extiosamente');
+    })
 
-    });
+    // this.authService.registerUser(user)
+    // .pipe(
+    //  tap( user => console.log({user})),
+    // )
+    // .subscribe( user => {
+
+    //   if( !user ) {
+    //     this.registerForm.reset();
+    //     return this.toastService.showError('Error', 'Registro invalido. Intente nuevamente');
+    //   }
+
+    //   this.router.navigateByUrl('auth/login')
+    //   this.toastService.showSuccess('Éxtio!', 'Te has registrado extiosamente');
+
+    // });
 
   }
 

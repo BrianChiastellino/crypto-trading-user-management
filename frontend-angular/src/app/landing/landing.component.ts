@@ -26,6 +26,7 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe(isLoggedIn => {
+      console.log({isLoggedIn })
       this.isLogin = isLoggedIn;
     });
   }

@@ -44,7 +44,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width password-container">
+    <mat-form-field *ngIf="!editMode" appearance="outline" class="full-width password-container">
       <mat-label>Contraseña</mat-label>
       <input [type]="hidePassword ? 'password' : 'text'" matInput formControlName="password" placeholder="Contraseña">
       <button mat-icon-button matSuffix (click)="showPassword()" type="button">
@@ -54,6 +54,8 @@
         {{ messageField('password') }}
       </mat-error>
     </mat-form-field>
+
+    <button *ngIf="editMode" mat-button mat-flat-button color="primary" (click)="changePassword()">Cambiar password</button>
 
     <mat-checkbox *ngIf="!editMode" formControlName="admin">Administrador</mat-checkbox>
 

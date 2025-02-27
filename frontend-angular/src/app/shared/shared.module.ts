@@ -13,6 +13,7 @@ import { ListTransactionsComponent } from './list-transactions/list-transactions
 import { TransactionTypePipe } from './pipe/transactionType.pipe';
 import { UserEliminated } from './pipe/user-eliminated.pipe';
 import { MatSortModule } from '@angular/material/sort';
+import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatSortModule } from '@angular/material/sort';
     ConfirmTransactionDialogComponent,
     ListTransactionsComponent,
     TransactionTypePipe,
-    UserEliminated
+    UserEliminated,
+    ChangePasswordDialogComponent
   ],
   imports: [
     CommonModule,

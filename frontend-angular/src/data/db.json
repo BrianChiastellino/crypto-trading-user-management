@@ -26,6 +26,15 @@
       "password": "Admin123!",
       "document": "11223344",
       "admin": true
+    },
+    {
+      "id": "94e3",
+      "name": "Brian",
+      "email": "cha@gmail.com",
+      "username": "chastesama",
+      "password": "ByChaste123!",
+      "document": "41897654",
+      "admin": false
     }
   ],
   "wallets": [

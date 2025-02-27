@@ -59,6 +59,7 @@ class WalletController {
 
     };
 
+    //todo: terminar el update porque no se logra aprecioar el body
     async update(req: Request, res: Response, next: NextFunction) {
 
         try {

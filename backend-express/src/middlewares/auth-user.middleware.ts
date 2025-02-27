@@ -5,6 +5,7 @@ import { UnauthorizedError } from "../errors/unauthorized.error";
 
 export const authUser = ( req : Request, res : Response, next : NextFunction ) : void => {
     try {
+        console.log( req.userPayloadDTO );
         const isUser : boolean = req.userPayloadDTO.admin;
 
         if ( isUser )

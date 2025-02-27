@@ -12,7 +12,7 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
     try {
 
         const token = req.headers['authorization']?.split(' ')[1];          // Obtenemos el token del header Authorization
-        console.log({ tokenMiddleware: token })
+        console.log(token)
 
         if (!token) {
             throw new UnauthorizedError('Token not provider ');

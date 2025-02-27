@@ -7,7 +7,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { environment } from '../../../../environments/environment';
 import { CustomValidators } from '../../../shared/validators/custom-validators';
 import { CustomHelpers } from '../../../shared/helpers/custom-helpers';
-import { UserLogin } from '../../models/user-login.interface';
+import { UserLoginDTO } from '../../models/user-login.interface';
 
 @Component({
   selector: 'auth-login-page',
@@ -45,7 +45,7 @@ export class LoginPageComponent {
       const identifier = this.loginForm.controls['identifier'].value;
       const password = this.loginForm.controls['password'].value;
 
-      const userlogin : UserLogin = { password };
+      const userlogin : UserLoginDTO = { password };
 
       if (identifier.includes('@')) {
         userlogin.email = identifier;    // Si tiene @, es email
@@ -60,12 +60,20 @@ export class LoginPageComponent {
           if ( !response )
             throw Error();
 
+
+          console.log({ response });
           const { token, user } = response;
 
-          localStorage.setItem(this.userToken, JSON.stringify(user));
+          localStorage.setItem('token', token );
+          localStorage.setItem('user', JSON.stringify( user ));
+          // localStorage.setItem(this.userToken, JSON.stringify(user));
 
-          if(user.admin) this.router.navigateByUrl('/admin/landing')
-          else  this.router.navigateByUrl('/landing');
+          if (user.admin) {
+            this.router.navigateByUrl('/admin/landing')
+          }
+          else {
+            this.router.navigateByUrl('/landing');
+          }
 
           this.toastService.showSuccess(`Éxito!`, 'Has iniciado sesion correctamente');
         },

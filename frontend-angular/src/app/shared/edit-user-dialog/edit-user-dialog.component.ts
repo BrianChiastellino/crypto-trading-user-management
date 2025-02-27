@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { User } from '../../auth/models/user.model';
 import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AuthService } from '../../auth/services/auth.service';
@@ -7,6 +7,7 @@ import { filter, Observable, pipe, switchMap, tap } from 'rxjs';
 import { ToastService } from '../services/toast.service';
 import { CustomValidators } from '../validators/custom-validators';
 import { CustomHelpers } from '../helpers/custom-helpers';
+import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 
 @Component({
   selector: 'app-edit-user-dialog',
@@ -37,6 +38,7 @@ export class EditUserDialogComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private toastService: ToastService,
+    private dialogRefChangePassword : MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -79,6 +81,21 @@ export class EditUserDialogComponent implements OnInit {
   private updateUser(user: User) {
     user.id = this.idUser!;
     return this.authService.updateUser(user);
+  }
+
+  public changePassword () {
+    const dialogChangePassword = this.dialogRefChangePassword.open( ChangePasswordDialogComponent, {
+      width: '400px',
+      data: this.idUser
+    });
+
+    dialogChangePassword.afterClosed().subscribe( change => {
+      if ( change ) {
+        this.toastService.showSuccess('Éxito', 'Contraseña cambiada con éxito!');
+      } else {
+        this.toastService.showError('Error', 'Error al cambiar la contraseña');
+      }
+    })
   }
 
   private createUser(user: User) {
