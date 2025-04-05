@@ -9,19 +9,28 @@ import { Observable, catchError, map, of, pipe, switchMap, tap, throwError } fro
 export class WalletService {
 
   private baseUrl: string = environment.urlBaseJsonServer;
+  private readonly urlBackend : string = environment.urlBackend;
+
 
   constructor(private http: HttpClient) { }
 
   public get wallets () : Observable<Wallet[]>{
     return this.http.get<Wallet[]>(`${this.baseUrl}/wallets`);
-  }
+  };
 
-  public addWallet (wallet: Wallet) : Observable<Wallet | null>{
+  public addWallet ( wallet : Wallet) : Observable<Wallet |null> {
+    if ( !wallet )
+      return of(null);
 
-     if( !wallet ) return of(null)
+    return this.http.post<Wallet>(`${this.urlBackend}/wallet`, wallet );
+  };
 
-    return this.http.post<Wallet>(`${ this.baseUrl }/wallets`, wallet);
-  }
+  // public addWallet (wallet: Wallet) : Observable<Wallet | null>{
+
+  //    if( !wallet ) return of(null)
+
+  //   return this.http.post<Wallet>(`${ this.baseUrl }/wallets`, wallet);
+  // }
 
   public updateWallet(wallet: Wallet) : Observable<Wallet | null>{
 
@@ -30,16 +39,25 @@ export class WalletService {
     return this.http.patch<Wallet>(`${this.baseUrl}/wallets/${wallet.id}`, wallet);
   }
 
+  // public getWalletByIdUser(idUser: string): Observable<Wallet | null> {
+
+  //   if( !idUser) return of(null);
+
+  //   return this.http.get<Wallet[]>(`${this.baseUrl}/wallets/?idUser=${idUser}`)
+  //   .pipe(
+  //     tap( wallet => console.log(wallet)),
+  //     map( wallet => {return wallet[0] } ),
+  //     catchError( () => { return of(null) })
+  //   )
+
+  // }
+
   public getWalletByIdUser(idUser: string): Observable<Wallet | null> {
 
     if( !idUser) return of(null);
 
-    return this.http.get<Wallet[]>(`${this.baseUrl}/wallets/?idUser=${idUser}`)
-    .pipe(
-      tap( wallet => console.log(wallet)),
-      map( wallet => {return wallet[0] } ),
-      catchError( () => { return of(null) })
-    )
+    return this.http.get<Wallet>(`${this.urlBackend}/wallet/${ idUser }`);
+
 
   }
 

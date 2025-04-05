@@ -31,20 +31,6 @@
         <td mat-cell *matCellDef="let user" class="centered-cell">{{ user.username }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="password">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="centered-header">
-          CONTRASEÑA
-        </th>
-        <td mat-cell *matCellDef="let user" class="centered-cell">
-          <div class="password-container">
-            <span>{{ passwordVisibility.get(user.id) ? user.password : '••••••••' }}</span>
-            <button mat-icon-button (click)="togglePasswordVisibility(user.id)">
-              <mat-icon>{{ passwordVisibility.get(user.id) ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="document">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="centered-header">DOCUMENTO</th>
         <td mat-cell *matCellDef="let user" class="centered-cell">{{ user.document }}</td>

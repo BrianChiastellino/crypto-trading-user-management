@@ -15,24 +15,26 @@ class WalletController {
     async create(req: Request, res: Response, next: NextFunction) {
 
         try {
-            const { id: userID } = req.userPayloadDTO;
             const walletDTO: WalletDTO = req.body;
 
-            const walletExists = await walletService.getByUserID(userID)
+            console.log({ walletDTO });
 
-            if (!!walletExists)
-                throw new BadRequestError('Wallet already exists');
+            const walletExists = await walletService.getByUserID( walletDTO.idUser )
 
-            const [walletCreated] = [walletRepository.create({
-                ...walletDTO,
-                userID: userID
-            })].flat();
+            console.log({ walletExists })
 
-            console.log({ walletCreated });
+            // if ( !!walletExists )
+            //     throw new BadRequestError('Wallet already exists');
 
-            const wallet = await walletService.create(walletCreated);
+            // const [walletCreated] = [walletRepository.create({
+            //     ...walletDTO,
+            // })].flat();
 
-            res.status(201).json(wallet);
+            // console.log({ walletCreated });
+
+            // const wallet = await walletService.create(walletCreated);
+
+            // res.status(201).json(wallet);
 
         } catch (error) {
             next(error);

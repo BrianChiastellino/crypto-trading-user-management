@@ -6,12 +6,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { WalletService } from '../../../wallet/services/wallet.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditUserDialogComponent } from '../../../shared/edit-user-dialog/edit-user-dialog.component';
-import { filter, Observable, switchMap, tap } from 'rxjs';
+import { catchError, filter, Observable, switchMap, tap } from 'rxjs';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ConfirmOperationDialogComponent } from '../../../shared/dialog/confirm-operation-dialog/confirm-operation-dialog.component';
 import { ToastService } from '../../../shared/services/toast.service';
 import { Wallet } from '../../../models/wallet/wallet.models';
 import { ShowWalletDialogComponent } from '../show-wallet-dialog/show-wallet-dialog.component';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-list-users',
@@ -25,7 +26,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
   @ViewChild (MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild (MatSort) sort: MatSort | null = null;
 
-  public displayedColumns: string[] = ['index', 'id', 'name', 'email', 'username', 'password', 'document', 'admin', 'edit', 'delete', 'wallet' ];
+  public displayedColumns: string[] = ['index', 'id', 'name', 'email', 'username', 'document', 'admin', 'edit', 'delete', 'wallet' ];
   public dataSource: MatTableDataSource<User> = new MatTableDataSource<User>();
 
   public passwordVisibility: Map<string, boolean> = new Map();
@@ -35,6 +36,8 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private toastService: ToastService,
+
+    private adminService : AdminService,
   ) {}
 
   ngOnInit(): void {
@@ -58,20 +61,17 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
 
     if ( user.admin ) return this.toastService.showError('Error', 'Los administradores no poseen billetera');
 
-    this.walletService.getWalletByIdUser( user.id )
-    .pipe(
-      tap( data => { if (!data) return this.toastService.showInfo('Info', 'El usuario no contiene billetera') }),
-    )
-    .subscribe( wallet => {
+    this.adminService.getWalletByID( user.id ).subscribe({
+      next: ( wallet ) => {
+        if ( wallet )
+          this.openDialogWallet(wallet).subscribe();
 
-      if( wallet ) this.openDialogWallet(wallet).subscribe();
-
-    });
-
+      },
+      error: () => this.toastService.showInfo('Info', 'El usuario no contiene billetera'),
+    })
   }
 
   private openDialogWallet ( wallet: Wallet) : Observable<boolean> {
-
 
     const dialogRef = this.dialog.open( ShowWalletDialogComponent, { data: wallet });
 
@@ -80,13 +80,13 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
   }
 
   private getUsers () : void {
-
-    this.authService.getAllUsers.subscribe( users => {
-      users.forEach( user => this.passwordVisibility.set(user.id, false));
-      this.dataSource.data = users;
-
+    this.adminService.getUsers().subscribe({
+      next: (users) => {
+        users.forEach(user => this.passwordVisibility.set(user.id, false));
+        this.dataSource.data = users;
+      },
+      error: () => this.toastService.showInfo('Info', 'No hay usuarios en sistema'),
     });
-
   }
 
   public editUser(user: User): void {
@@ -103,7 +103,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed()
       .pipe(
         filter(data => !!data),
-        switchMap( users => this.authService.getAllUsers)
+        switchMap( users => this.adminService.getUsers())
       )
       .subscribe(users => {
         this.dataSource.data = users;
@@ -122,7 +122,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
       switchMap(() => this.walletService.deleteWalletByIdUser(user.id)),
       switchMap(() => this.authService.deleteUserById(user.id)),
       tap( () =>  this.toastService.showSuccess('Éxito', 'Operación realizada con éxito!')),
-      switchMap(() => this.authService.getAllUsers)
+      switchMap(() => this.adminService.getUsers())
     )
     .subscribe(users => this.dataSource.data = users);
 

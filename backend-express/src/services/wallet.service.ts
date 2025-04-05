@@ -21,7 +21,10 @@ class WalletService {
     };
 
     async getByUserID ( userID : User['id']) : Promise<Wallet | null> {
-        return await walletRepository.findOne({ where : { userID }})
+        console.log({ userID })
+        const data = await walletRepository.findOneBy({ userID })
+        console.log({ data });
+        return data; 
     };
 
     //todo: Crear bien el update de la wallet

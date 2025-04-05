@@ -23,6 +23,7 @@ export class WalletPageComponent implements OnInit {
   private token: string = environment.userToken;
   public wallet: Wallet | null = null;
   private user: User | null = null;
+  private userID : string | null = null;
 
 
   public formFunds: FormGroup = new FormGroup({
@@ -50,17 +51,31 @@ export class WalletPageComponent implements OnInit {
   }
 
   private getUserFromLocalStorage(): void {
-    this.user = new User(JSON.parse(localStorage.getItem(this.token)!));
+    const { id } = JSON.parse(localStorage.getItem('user')!);
+    this.userID = id;
   }
+
 
   private getWallet(): void {
 
-    this.walletService.getWalletByIdUser(this.user!.id)
-      .pipe(
-        tap( wallet => { if (!wallet) { this.createWallet() } }),
-        tap( wallet => { if (wallet) { this.wallet = wallet} } )
-      )
-      .subscribe();
+    this.walletService.getWalletByIdUser(this.userID!).subscribe({
+      next: ( wallet ) => {
+        this.wallet = wallet;
+        console.log( this.wallet );
+      },
+
+      error: ( error ) => {
+        console.log( {error} )
+        this.createWallet();
+        console.log( this.wallet );
+      }
+    });
+
+      // .pipe(
+      //   tap( wallet => { if (!wallet) { this.createWallet() } }),
+      //   tap( wallet => { if (wallet) { this.wallet = wallet} } )
+      // )
+      // .subscribe();
 
   }
 
@@ -156,22 +171,28 @@ export class WalletPageComponent implements OnInit {
   }
 
 
-  private createWallet(): void {
+  private createWallet() : void {
 
     const wallet = new Wallet({
       funds: 0,
-      idUser: this.user!.id,
+      idUser: this.userID!,
     });
 
-    this.walletService.addWallet(wallet)
-      .pipe(
-        tap(wallet => this.wallet = wallet),
-      )
-      .subscribe( wallet => this.wallet = wallet);
+    console.log({ wallet });
+
+    this.walletService.addWallet(wallet).subscribe({
+      next : ( wallet ) => {
+        console.log( wallet );
+      },
+
+      error: ( error ) => {
+        console.log( error );
+      }
+    })
 
   }
 
-  private updateWallet(): void {
+  private updateWallet() : void {
 
     if (!this.wallet) return;
 

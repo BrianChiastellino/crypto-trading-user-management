@@ -11,8 +11,9 @@ const { JWT_SCRET_KEY : jwtScretKey } = process.env;
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction): void => {
     try {
 
-        const token = req.headers['authorization']?.split(' ')[1];          // Obtenemos el token del header Authorization
-        console.log(token)
+        const { authorization : token } = req.headers;                      // Obtenemos el token del header Authorization
+
+        console.log({ token });
 
         if (!token) {
             throw new UnauthorizedError('Token not provider ');

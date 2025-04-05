@@ -5,7 +5,7 @@ import walletController from '../controllers/wallet.controller';
 
 const router = express.Router();
 
-router.post('/create', walletController.create );
+router.post('', walletController.create );
 
 router.route('/:id')
 .get( walletController.get )

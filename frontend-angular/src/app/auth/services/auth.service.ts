@@ -62,6 +62,24 @@ export class AuthService {
     // );
   }
 
+  // ------------------------ ADMIN ------------------------------- //
+
+  // public get getAllUsers(): Observable<User[]> {
+  //   const token = localStorage.getItem('token');
+
+  //   if ( !token )
+  //     return of([]);
+
+  //   const headers = new HttpHeaders({
+  //     'authorization' : token
+  //   });
+
+  //   console.log({ token });
+
+  //   return this.http.get<User[]>(`${ this.urlBackend }/admin/users`, { headers });
+  // };
+
+
 
 
 
@@ -76,11 +94,7 @@ export class AuthService {
 
   // CRUD
 
-  public get getAllUsers(): Observable<User[]> {
 
-    return this.http.get<User[]>(`${ this.baseUrl }/users`)
-
-  }
 
   public addUser(user: User): Observable<User | null>{
 
